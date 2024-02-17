@@ -20,7 +20,6 @@ defmodule PolaroidsWeb.GalleryLive do
       last_modified: last_modified,
       src: ~p"/s3/#{key}"
     } end
-    IO.inspect(images)
 
     if length(images) == 0 do
       raise NotFoundError, "gallery with this name doesn't exist"
@@ -32,7 +31,9 @@ defmodule PolaroidsWeb.GalleryLive do
   end
 
   def handle_event("remove", %{"id" => dom_id}, socket) do
-    {:noreply, stream_delete_by_dom_id(socket, :images, dom_id)}
+    #ExAws.S3.delete_object!("polaroids")
+    PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "delete", name: socket.assigns.gallery, id: dom_id})
+    {:noreply, socket}
   end
 
   def handle_info(%{event: "upload", name: name, image: image}, socket) do
@@ -43,6 +44,15 @@ defmodule PolaroidsWeb.GalleryLive do
         #last_modified: last_modified,
         src: ~p"/s3/#{key}"
       }, at: 0)
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_info(%{event: "delete", name: name, id: dom_id}, socket) do
+    if name == socket.assigns.gallery do
+      socket = stream_delete_by_dom_id(socket, :images, dom_id)
       {:noreply, socket}
     else
       {:noreply, socket}
