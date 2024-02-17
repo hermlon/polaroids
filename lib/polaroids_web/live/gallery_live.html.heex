@@ -7,7 +7,7 @@
         >
             <img class="object-cover object-center w-full h-40 max-w-full rounded-lg"
                 phx-click={JS.push("remove", value: %{id: dom_id})}
-                src={image.src} />
+                src={Image.static_url(image.key)} />
         </div>
     </div>
 </div>
