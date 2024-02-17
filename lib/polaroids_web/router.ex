@@ -15,9 +15,15 @@ defmodule PolaroidsWeb.Router do
   end
 
   scope "/", PolaroidsWeb do
+    pipe_through :api
+    post "/g/:gallery", GalleryController, :create
+  end
+
+  scope "/", PolaroidsWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/g/:gallery", GalleryLive
+    get "/s3/:path", S3Controller, :show
   end
 
   # Other scopes may use custom stacks.

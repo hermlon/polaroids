@@ -111,3 +111,7 @@ defmodule PolaroidsWeb do
     apply(__MODULE__, which, [])
   end
 end
+
+defmodule PolaroidsWeb.NotFoundError do
+  defexception [:message, plug_status: 404]
+end

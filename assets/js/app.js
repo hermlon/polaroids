@@ -39,3 +39,8 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+import {wrapGrid} from "animate-css-grid"
+const grid = document.querySelector(".grid")
+wrapGrid(grid, {
+    onStart: (element) => {console.log('start animate')}
+})

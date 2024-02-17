@@ -30,6 +30,14 @@ config :polaroids, PolaroidsWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :polaroids, Polaroids.Mailer, adapter: Swoosh.Adapters.Local
 
+config :ex_aws,
+    json_codec: Jason,
+    access_key_id: {:system, "S3_ACCESS_KEY_ID"},
+    secret_access_key: {:system, "S3_SECRET_ACCESS_KEY"}
+
+config :ex_aws, :s3,
+    host: {:system, "S3_URL"}
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
