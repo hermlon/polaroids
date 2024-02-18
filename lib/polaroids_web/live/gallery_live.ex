@@ -34,4 +34,30 @@ defmodule PolaroidsWeb.GalleryLive do
     end
   end
 
+  def image(assigns) do
+    ~H"""
+    <div class="grid">
+      <img
+        class="object-cover object-center rounded-lg transition hover:scale-105 col-[1] row-[1]"
+        phx-click={JS.push("remove", value: %{id: @image.key})}
+        src={Image.static_url(@image.key)}
+      />
+      <div class="flex flex-col justify-end pointer-events-none m-5 z-10 col-[1] row-[1]">
+        <div class="flex flex-row justify-between">
+          <div class="flex items-end">
+            Me and the girls studying
+          </div>
+          <div class="flex flex-col items-end">
+            <div class="flex gap-1 opacity-50">
+              <.icon name="hero-map-pin" /> 37c3
+            </div>
+            <div>
+              Leonie
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
 end
