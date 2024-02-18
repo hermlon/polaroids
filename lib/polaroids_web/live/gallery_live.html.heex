@@ -5,9 +5,28 @@
             :for={{dom_id, image} <- @streams.images}
             id={dom_id}
         >
-            <img class="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                phx-click={JS.push("remove", value: %{id: dom_id})}
-                src={Image.static_url(image.key)} />
+            <div class="grid max-w-full">
+                <img class="object-cover object-center rounded-lg transition hover:scale-105 col-[1] row-[1]"
+                    phx-click={JS.push("remove", value: %{id: dom_id})}
+                    src={Image.static_url(image.key)} />
+                <div class="flex flex-col justify-end pointer-events-none m-5 z-10 col-[1] row-[1]">
+                    <div class="flex flex-row justify-between">
+                        <div class="flex items-end">
+                            Me and the girls studying
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <div class="flex gap-1 opacity-50">
+                                <.icon name="hero-map-pin" />
+                                37c3
+                            </div>
+                            <div>
+                                Leonie
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
