@@ -1,48 +1,12 @@
 <div class="flex p-4 lg:items-center justify-center min-h-screen bg-blue-100">
-        <div class="grid lg:grid-cols-2 grid-cols-1 gap-4 bg-green-100 w-4/5">
-
+        <div class="animated-grid grid lg:grid-cols-4 grid-cols-2 gap-4 w-4/5" id="grid-main" phx-update="stream">
             <div
-                class="grid-item"
+                class="grid-item first:col-span-2 first:row-span-2 transition-opacity w-full"
+                phx-hook="ImageLoad"
                 :for={{dom_id, image} <- @streams.images}
                 id={dom_id}
             >
                 <.image image={image} />
             </div>
-                <div class="grid grid-cols-2 gap-4">
-
-                </div>
-
         </div>
-    <!--
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3" id="gallery-images" phx-update="stream">
-        <div
-            class="grid-item"
-            :for={{dom_id, image} <- @streams.images}
-            id={dom_id}
-        >
-            <div class="grid max-w-full">
-                <img class="object-cover object-center rounded-lg transition hover:scale-105 col-[1] row-[1]"
-                    phx-click={JS.push("remove", value: %{id: dom_id})}
-                    src={Image.static_url(image.key)} />
-                <div class="flex flex-col justify-end pointer-events-none m-5 z-10 col-[1] row-[1]">
-                    <div class="flex flex-row justify-between">
-                        <div class="flex items-end">
-                            Me and the girls studying
-                        </div>
-                        <div class="flex flex-col items-end">
-                            <div class="flex gap-1 opacity-50">
-                                <.icon name="hero-map-pin" />
-                                37c3
-                            </div>
-                            <div>
-                                Leonie
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-
 </div>

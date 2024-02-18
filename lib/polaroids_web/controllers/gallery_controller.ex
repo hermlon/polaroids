@@ -5,8 +5,8 @@ defmodule Image do
     %{headers: headers_list} = ExAws.S3.put_object("polaroids", key, file_binary, meta: [
       {:nickname, nickname},
       {:description, description},
-      {:venue, venue},
-    ]) |> ExAws.request!
+      {:venue, venue}] |> Enum.filter(&elem(&1, 1))
+    ) |> ExAws.request!
     %{"Date" => date} = Map.new(headers_list)
     %Image{
       key: key,
@@ -17,24 +17,39 @@ defmodule Image do
     }
   end
 
-  def index(gallery) do
-    {:ok, %{body: %{contents: images}}} = ExAws.S3.list_objects("polaroids", prefix: gallery <> "/") |> ExAws.request
-    IO.inspect(images)
+  def get_keys_in_gallery(gallery) do
+    %{body: %{contents: images}} = ExAws.S3.list_objects("polaroids", prefix: gallery <> "/") |> ExAws.request!
     Enum.map(images, fn %{
       key: key,
-      last_modified: last_modified,
-    } -> %Image{
+      last_modified: last_modified
+    } -> %{
+      key: key,
+      last_modified: last_modified
+    } end)
+  end
+
+  def index(gallery, limit \\ nil) do
+    keys = get_keys_in_gallery(gallery)
+    |> Enum.sort_by(&(&1.last_modified), :desc)
+    keys = if limit do Enum.take(keys, limit) else keys end
+
+    keys |> Enum.map(fn %{
       key: key,
       last_modified: last_modified,
-      nickname: "",
-      description: "",
-      venue: ""
+    } ->
+    %{headers: headers_list} = Image.head(key)
+    headers = Map.new(headers_list)
+    %Image{
+      key: key,
+      last_modified: last_modified,
+      nickname: Map.get(headers, "x-amz-meta-nickname"),
+      description: Map.get(headers, "x-amz-meta-description"),
+      venue: Map.get(headers, "x-amz-meta-venue")
     } end)
-    |> Enum.sort_by(&(&1.last_modified), :desc)
   end
 
   def head(key) do
-    ExAws.S3.head_object("polaroids", key) |> ExAws.request! |> IO.inspect()
+    ExAws.S3.head_object("polaroids", key) |> ExAws.request!
   end
 
   def static_url(key) do
@@ -51,7 +66,7 @@ defmodule PolaroidsWeb.GalleryController do
     file_uuid = Ecto.UUID.generate()
     key = "#{gallery}/#{file_uuid}#{file_extension}"
     {:ok, file_binary} = File.read(file.path)
-    image = Image.store(key, file_binary, Map.get(params, "nickname", ""), Map.get(params, "description", ""), Map.get(params, "venue", ""))
+    image = Image.store(key, file_binary, Map.get(params, "nickname"), Map.get(params, "description"), Map.get(params, "venue"))
     PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "upload", name: gallery, image: image})
     render(conn, :show, image: image)
   end

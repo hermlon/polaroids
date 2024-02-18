@@ -2,6 +2,10 @@ defmodule PolaroidsWeb.GalleryLive do
   alias Phoenix.PubSub
   use PolaroidsWeb, :live_view
 
+  def top_5_images(gallery) do
+    Image.index(gallery) |> Enum.take(5) |> Enum.with_index |> Map.new(fn {val, key} -> {key, val} end)
+  end
+
   def mount(%{"gallery" => gallery}, _session, socket) do
     PubSub.subscribe(Polaroids.PubSub, "gallery")
     socket = assign(socket, :gallery, gallery)
@@ -36,23 +40,28 @@ defmodule PolaroidsWeb.GalleryLive do
 
   def image(assigns) do
     ~H"""
-    <div class="grid">
-      <img
-        class="object-cover object-center rounded-lg transition hover:scale-105 col-[1] row-[1]"
-        phx-click={JS.push("remove", value: %{id: @image.key})}
-        src={Image.static_url(@image.key)}
-      />
-      <div class="flex flex-col justify-end pointer-events-none m-5 z-10 col-[1] row-[1]">
+    <div class="grid w-full">
+      <div class="w-full rounded-lg col-[1] row-[1] overflow-hidden">
+        <img
+          class="w-full object-cover object-center transition hover:scale-105 duration-500"
+          phx-click={JS.push("remove", value: %{id: @image.key})}
+          src={Image.static_url(@image.key)}
+        />
+      </div>
+      <div class="flex flex-col justify-end pointer-events-none p-5 z-10 col-[1] row-[1] w-full">
         <div class="flex flex-row justify-between">
           <div class="flex items-end">
-            Me and the girls studying
+            <%= @image.description %>
           </div>
           <div class="flex flex-col items-end">
-            <div class="flex gap-1 opacity-50">
-              <.icon name="hero-map-pin" /> 37c3
+            <div :if={@image.venue} class="flex flex-row gap-1 opacity-50 items-center">
+              <.icon name="hero-map-pin" />
+              <div>
+                <%= @image.venue %>
+              </div>
             </div>
-            <div>
-              Leonie
+            <div :if={@image.nickname}>
+              <%= @image.nickname %>
             </div>
           </div>
         </div>
