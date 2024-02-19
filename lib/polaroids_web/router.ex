@@ -23,6 +23,7 @@ defmodule PolaroidsWeb.Router do
     pipe_through :browser
 
     live "/g/:gallery", GalleryLive
+    live "/g/:gallery/:image", ImageLive
     #get "/s3/:path", S3Controller, :show, log: false
   end
 
