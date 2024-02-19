@@ -1,4 +1,5 @@
 defmodule PolaroidsWeb.GalleryComponents do
+  alias Polaroids.Gallery
   use PolaroidsWeb, :html
 
   def image(assigns) do
@@ -8,7 +9,7 @@ defmodule PolaroidsWeb.GalleryComponents do
         <img
           class="w-full object-cover object-center transition hover:scale-105 duration-500"
           phx-click={JS.push("remove", value: %{id: @image.key})}
-          src={Image.static_url(@image.key)}
+          src={Gallery.static_url(@image.key)}
         />
       </div>
       <div class="flex flex-col justify-end pointer-events-none p-5 z-10 col-[1] row-[1] w-full">

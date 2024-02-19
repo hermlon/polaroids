@@ -1,22 +1,19 @@
 defmodule PolaroidsWeb.GalleryLive do
+  alias Polaroids.Gallery
   alias Phoenix.PubSub
   use PolaroidsWeb, :live_view
-
-  def top_5_images(gallery) do
-    Image.index(gallery) |> Enum.take(5) |> Enum.with_index |> Map.new(fn {val, key} -> {key, val} end)
-  end
 
   def mount(%{"gallery" => gallery}, _session, socket) do
     PubSub.subscribe(Polaroids.PubSub, "gallery")
     socket = assign(socket, :gallery, gallery)
     socket = stream_configure(socket, :images, dom_id: &(&1.key))
-    socket = stream(socket, :images, Image.index(gallery))
+    socket = stream(socket, :images, Gallery.list_images(gallery))
     {:ok, socket}
   end
 
   def handle_event("remove", %{"id" => dom_id}, socket) do
     PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "delete", name: socket.assigns.gallery, id: dom_id})
-    ExAws.S3.delete_object("polaroids", dom_id) |> ExAws.request!
+    Gallery.delete_image(dom_id)
     {:noreply, socket}
   end
 
