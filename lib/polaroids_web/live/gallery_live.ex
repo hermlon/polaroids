@@ -49,7 +49,7 @@ defmodule PolaroidsWeb.GalleryLive do
         />
       </div>
       <div class="flex flex-col justify-end pointer-events-none p-5 z-10 col-[1] row-[1] w-full">
-        <div class="flex flex-row justify-between">
+        <div class="flex flex-row hidden sm:flex justify-between">
           <div class="flex items-end">
             <%= @image.description %>
           </div>
