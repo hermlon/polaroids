@@ -1,9 +1,10 @@
 defmodule PolaroidsWeb.ImageLive do
+  alias Polaroids.Gallery
   alias Phoenix.PubSub
   use PolaroidsWeb, :live_view
 
   def mount(%{"gallery" => gallery, "image" => image}, _session, socket) do
-    socket = assign(socket, :image_key, "#{gallery}/#{image}")
+    socket = assign(socket, :image, Gallery.get_image!("#{gallery}/#{image}"))
     {:ok, socket}
   end
 

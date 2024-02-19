@@ -8,8 +8,9 @@ defmodule Polaroids.Gallery do
 
   def static_url(key), do: "https://r2.yuustan.space/" <> key
 
-  defp get_keys_in_gallery(gallery) do
-    %{body: %{contents: images}} = ExAws.S3.list_objects("polaroids", prefix: gallery <> "/") |> ExAws.request!
+  defp get_keys_in_bucket(prefix) do
+    IO.inspect(prefix)
+    %{body: %{contents: images}} = ExAws.S3.list_objects("polaroids", prefix: prefix) |> ExAws.request! |> IO.inspect()
     Enum.map(images, fn %{
       key: key,
       last_modified: last_modified
@@ -19,8 +20,8 @@ defmodule Polaroids.Gallery do
     } end)
   end
 
-  def list_images(gallery, limit \\ nil) do
-    keys = get_keys_in_gallery(gallery)
+  defp get_images_by_prefix(prefix, limit) do
+    keys = get_keys_in_bucket(prefix)
     |> Enum.sort_by(&(&1.last_modified), :desc)
     keys = if limit do Enum.take(keys, limit) else keys end
 
@@ -28,7 +29,7 @@ defmodule Polaroids.Gallery do
       key: key,
       last_modified: last_modified,
     } ->
-    %{headers: headers_list} = get_image!(key)
+    %{headers: headers_list} = ExAws.S3.head_object("polaroids", key) |> ExAws.request!
     headers = Map.new(headers_list)
     %Image{
       key: key,
@@ -39,8 +40,12 @@ defmodule Polaroids.Gallery do
     } end)
   end
 
-  def get_image!(key) do
-    ExAws.S3.head_object("polaroids", key) |> ExAws.request!
+  def list_images(gallery, limit \\ nil) do
+    get_images_by_prefix(gallery <> "/", limit)
+  end
+
+  def get_image!(prefix) do
+    get_images_by_prefix(prefix, 1) |> hd
   end
 
   def create_image(key, file_binary, nickname, description, venue) do

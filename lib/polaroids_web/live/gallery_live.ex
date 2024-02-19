@@ -1,5 +1,6 @@
 defmodule PolaroidsWeb.GalleryLive do
   alias Polaroids.Gallery
+  alias Polaroids.Gallery.Image
   alias Phoenix.PubSub
   use PolaroidsWeb, :live_view
 

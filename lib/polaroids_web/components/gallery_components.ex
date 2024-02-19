@@ -8,7 +8,6 @@ defmodule PolaroidsWeb.GalleryComponents do
       <div class="w-full rounded-lg col-[1] row-[1] overflow-hidden">
         <img
           class="w-full object-cover object-center transition hover:scale-105 duration-500"
-          phx-click={JS.push("remove", value: %{id: @image.key})}
           src={Gallery.static_url(@image.key)}
         />
       </div>

@@ -12,6 +12,14 @@ defmodule Polaroids.Gallery.Image do
     timestamps(type: :utc_datetime)
   end
 
+  def gallery(image) do
+    Path.split(image.key) |> hd
+  end
+
+  def name(image) do
+    Path.basename(image.key, Path.extname(image.key))
+  end
+
   @doc false
   def changeset(image, attrs) do
     image

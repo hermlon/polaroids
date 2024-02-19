@@ -6,7 +6,9 @@
                 :for={{dom_id, image} <- @streams.images}
                 id={dom_id}
             >
-                <PolaroidsWeb.GalleryComponents.image image={image} />
+                <.link navigate={~p"/g/#{Image.gallery(image)}/#{Image.name(image)}"}>
+                    <PolaroidsWeb.GalleryComponents.image image={image} />
+                </.link>
             </div>
         </div>
 </div>
