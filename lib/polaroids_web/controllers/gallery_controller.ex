@@ -1,4 +1,5 @@
 defmodule Image do
+  alias Polaroids.Helpers.RFC2047
   defstruct [:key, :last_modified, :description, :nickname, :venue]
 
   def store(key, file_binary, nickname, description, venue) do
@@ -42,9 +43,9 @@ defmodule Image do
     %Image{
       key: key,
       last_modified: last_modified,
-      nickname: Map.get(headers, "x-amz-meta-nickname"),
-      description: Map.get(headers, "x-amz-meta-description"),
-      venue: Map.get(headers, "x-amz-meta-venue")
+      nickname: Map.get(headers, "x-amz-meta-nickname") |> RFC2047.parse_encoded_word,
+      description: Map.get(headers, "x-amz-meta-description") |> RFC2047.parse_encoded_word,
+      venue: Map.get(headers, "x-amz-meta-venue") |> RFC2047.parse_encoded_word
     } end)
   end
 

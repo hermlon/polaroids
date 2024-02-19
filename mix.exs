@@ -53,6 +53,7 @@ defmodule Polaroids.MixProject do
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.6.6"},
       {:ecto_sql, "~> 3.0"},
+      {:mail, "~> 0.3"},
     ]
   end
 
