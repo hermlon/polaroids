@@ -9,8 +9,7 @@ defmodule Polaroids.Gallery do
   def static_url(key), do: "https://r2.yuustan.space/" <> key
 
   defp get_keys_in_bucket(prefix) do
-    IO.inspect(prefix)
-    %{body: %{contents: images}} = ExAws.S3.list_objects("polaroids", prefix: prefix) |> ExAws.request! |> IO.inspect()
+    %{body: %{contents: images}} = ExAws.S3.list_objects("polaroids", prefix: prefix) |> ExAws.request!
     Enum.map(images, fn %{
       key: key,
       last_modified: last_modified
@@ -33,7 +32,7 @@ defmodule Polaroids.Gallery do
     headers = Map.new(headers_list)
     %Image{
       key: key,
-      last_modified: last_modified,
+      last_modified: Timex.parse!(last_modified, "{ISO:Extended:Z}"),
       nickname: Map.get(headers, "x-amz-meta-nickname") |> RFC2047.parse_encoded_word,
       description: Map.get(headers, "x-amz-meta-description") |> RFC2047.parse_encoded_word,
       venue: Map.get(headers, "x-amz-meta-venue") |> RFC2047.parse_encoded_word
@@ -54,7 +53,8 @@ defmodule Polaroids.Gallery do
       {:description, description},
       {:venue, venue}] |> Enum.filter(&elem(&1, 1))
     ) |> ExAws.request!
-    %{"Date" => date} = Map.new(headers_list)
+    %{"Date" => date_string} = Map.new(headers_list)
+    date = Timex.parse!(date_string, "{RFC1123}")
     %Image{
       key: key,
       last_modified: date,

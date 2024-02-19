@@ -54,6 +54,7 @@ defmodule Polaroids.MixProject do
       {:sweet_xml, "~> 0.6.6"},
       {:ecto_sql, "~> 3.0"},
       {:mail, "~> 0.3"},
+      {:timex, "~> 3.7"},
     ]
   end
 

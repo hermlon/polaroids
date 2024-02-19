@@ -1,3 +1,27 @@
-<PolaroidsWeb.GalleryComponents.image image={@image} />
-
-<!--          phx-click={JS.push("remove", value: %{id: @image.key})}-->
+<div class="flex justify-center p-8">
+  <div class="flex justify-center bg-neutral-800 p-8 rounded-lg">
+    <div class="flex flex-col max-w-md w-full space-y-2">
+      <PolaroidsWeb.GalleryComponents.image image={@image} />
+      <div class="self-end text-xs opacity-50">
+        <%= Timex.from_now(@image.last_modified) %>
+      </div>
+      <div :if={@image.nickname} class="self-end">
+        by <%= @image.nickname %>
+      </div>
+      <div :if={@image.description} class="p-2 bg-neutral-900 rounded-lg">
+        <%= @image.description %>
+      </div>
+      <div :if={@image.venue} class="p-2 bg-neutral-900 rounded-lg">
+        <div class="flex flex-row gap-1 items-center">
+          <.icon name="hero-map-pin" />
+          <div>
+            <%= @image.venue %>
+          </div>
+        </div>
+      </div>
+      <button phx-click={JS.push("remove", value: %{id: @image.key})}>
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

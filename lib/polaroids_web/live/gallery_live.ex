@@ -12,12 +12,6 @@ defmodule PolaroidsWeb.GalleryLive do
     {:ok, socket}
   end
 
-  def handle_event("remove", %{"id" => dom_id}, socket) do
-    PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "delete", name: socket.assigns.gallery, id: dom_id})
-    Gallery.delete_image(dom_id)
-    {:noreply, socket}
-  end
-
   def handle_info(%{event: "upload", name: name, image: image}, socket) do
     if name == socket.assigns.gallery do
       socket = stream_insert(socket, :images, image, at: 0)
@@ -27,12 +21,8 @@ defmodule PolaroidsWeb.GalleryLive do
     end
   end
 
-  def handle_info(%{event: "delete", name: name, id: dom_id}, socket) do
-    if name == socket.assigns.gallery do
-      socket = stream_delete_by_dom_id(socket, :images, dom_id)
-      {:noreply, socket}
-    else
-      {:noreply, socket}
-    end
+  def handle_info(%{event: "delete", key: key}, socket) do
+    socket = stream_delete_by_dom_id(socket, :images, key)
+    {:noreply, socket}
   end
 end

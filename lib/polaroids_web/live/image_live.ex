@@ -8,18 +8,9 @@ defmodule PolaroidsWeb.ImageLive do
     {:ok, socket}
   end
 
-  def handle_event("remove", %{"id" => dom_id}, socket) do
-    PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "delete", name: socket.assigns.gallery, id: dom_id})
-    ExAws.S3.delete_object("polaroids", dom_id) |> ExAws.request!
-    {:noreply, socket}
-  end
-
-  def handle_info(%{event: "delete", name: name, id: dom_id}, socket) do
-    if name == socket.assigns.gallery do
-      socket = stream_delete_by_dom_id(socket, :images, dom_id)
-      {:noreply, socket}
-    else
-      {:noreply, socket}
-    end
+  def handle_event("remove", %{"id" => key}, socket) do
+    PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "delete", key: key})
+    ExAws.S3.delete_object("polaroids", key) |> ExAws.request!
+    {:noreply, push_navigate(socket, to: ~p"/g/#{Gallery.Image.gallery(key)}", replace: true)}
   end
 end
