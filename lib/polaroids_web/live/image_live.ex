@@ -10,7 +10,7 @@ defmodule PolaroidsWeb.ImageLive do
 
   def handle_event("remove", %{"id" => key}, socket) do
     PubSub.broadcast!(Polaroids.PubSub, "gallery", %{event: "delete", key: key})
-    ExAws.S3.delete_object("polaroids", key) |> ExAws.request!
+    Gallery.delete_image(key)
     {:noreply, push_navigate(socket, to: ~p"/g/#{Gallery.Image.gallery(key)}", replace: true)}
   end
 

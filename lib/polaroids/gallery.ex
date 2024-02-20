@@ -6,10 +6,12 @@ defmodule Polaroids.Gallery do
   alias Polaroids.Helpers.RFC2047
   alias Polaroids.Gallery.Image
 
-  def static_url(key), do: "https://r2.yuustan.space/" <> key
+  def bucket, do: Application.fetch_env!(:polaroids, :s3_bucket)
+
+  def static_url(key), do: Application.fetch_env!(:polaroids, :s3_static_url) <> "/" <> key
 
   defp get_keys_in_bucket(prefix) do
-    %{body: %{contents: images}} = ExAws.S3.list_objects("polaroids", prefix: prefix) |> ExAws.request!
+    %{body: %{contents: images}} = ExAws.S3.list_objects(bucket(), prefix: prefix) |> ExAws.request!
     Enum.map(images, fn %{
       key: key,
       last_modified: last_modified
@@ -28,7 +30,7 @@ defmodule Polaroids.Gallery do
       key: key,
       last_modified: last_modified,
     } ->
-    %{headers: headers_list} = ExAws.S3.head_object("polaroids", key) |> ExAws.request!
+    %{headers: headers_list} = ExAws.S3.head_object(bucket(), key) |> ExAws.request!
     headers = Map.new(headers_list)
     %Image{
       key: key,
@@ -50,7 +52,7 @@ defmodule Polaroids.Gallery do
 
   def create_image(key, file_binary, nickname, description, venue, meta) do
     {mimetype, _} = ExImageInfo.type(file_binary)
-    %{headers: headers_list} = ExAws.S3.put_object("polaroids", key, file_binary,
+    %{headers: headers_list} = ExAws.S3.put_object(bucket(), key, file_binary,
       content_type: mimetype,
       content_disposition: "attachment",
       meta: [
@@ -73,6 +75,6 @@ defmodule Polaroids.Gallery do
   end
 
   def delete_image(key) do
-    ExAws.S3.delete_object("polaroids", key) |> ExAws.request!
+    ExAws.S3.delete_object(bucket(), key) |> ExAws.request!
   end
 end

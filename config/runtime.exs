@@ -20,6 +20,18 @@ if System.get_env("PHX_SERVER") do
   config :polaroids, PolaroidsWeb.Endpoint, server: true
 end
 
+s3_static_url = System.get_env("POLAROIDS_S3_STATIC_URL") ||
+  raise """
+  environment variable POLAROIDS_S3_STATIC_URL is missing.
+  """
+
+s3_bucket = System.get_env("POLAROIDS_S3_BUCKET") ||
+  raise """
+  environment variable POLAROIDS_S3_BUCKET is missing.
+  """
+
+config :polaroids, s3_static_url: s3_static_url, s3_bucket: s3_bucket
+
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
