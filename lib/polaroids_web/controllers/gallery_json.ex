@@ -10,6 +10,7 @@ alias Polaroids.Gallery
       nickname: image.nickname,
       description: image.description,
       venue: image.venue,
+      meta: image.meta,
       url: Gallery.static_url(image.key),
       page: url(~p"/g/#{Gallery.Image.gallery(image)}/#{Gallery.Image.name(image)}")
     }

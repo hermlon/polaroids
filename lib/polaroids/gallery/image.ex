@@ -8,6 +8,7 @@ defmodule Polaroids.Gallery.Image do
     field :last_modified, :string
     field :nickname, :string
     field :venue, :string
+    field :meta, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -27,7 +28,7 @@ defmodule Polaroids.Gallery.Image do
   @doc false
   def changeset(image, attrs) do
     image
-    |> cast(attrs, [:key, :last_modified, :description, :nickname, :venue])
-    |> validate_required([:key, :last_modified, :description, :nickname, :venue])
+    |> cast(attrs, [:key, :last_modified, :description, :nickname, :venue, :meta])
+    |> validate_required([:key, :last_modified, :description, :nickname, :venue, :meta])
   end
 end

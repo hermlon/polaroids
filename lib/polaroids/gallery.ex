@@ -35,7 +35,8 @@ defmodule Polaroids.Gallery do
       last_modified: Timex.parse!(last_modified, "{ISO:Extended:Z}"),
       nickname: Map.get(headers, "x-amz-meta-nickname") |> RFC2047.parse_encoded_word,
       description: Map.get(headers, "x-amz-meta-description") |> RFC2047.parse_encoded_word,
-      venue: Map.get(headers, "x-amz-meta-venue") |> RFC2047.parse_encoded_word
+      venue: Map.get(headers, "x-amz-meta-venue") |> RFC2047.parse_encoded_word,
+      meta: Map.get(headers, "x-amz-meta-meta") |> RFC2047.parse_encoded_word,
     } end)
   end
 
@@ -47,7 +48,7 @@ defmodule Polaroids.Gallery do
     get_images_by_prefix(prefix, 1) |> hd
   end
 
-  def create_image(key, file_binary, nickname, description, venue) do
+  def create_image(key, file_binary, nickname, description, venue, meta) do
     {mimetype, _} = ExImageInfo.type(file_binary)
     %{headers: headers_list} = ExAws.S3.put_object("polaroids", key, file_binary,
       content_type: mimetype,
@@ -55,7 +56,8 @@ defmodule Polaroids.Gallery do
       meta: [
         {:nickname, nickname},
         {:description, description},
-        {:venue, venue}
+        {:venue, venue},
+        {:meta, meta},
       ] |> Enum.filter(&elem(&1, 1))
     ) |> ExAws.request!
     %{"Date" => date_string} = Map.new(headers_list)
@@ -65,7 +67,8 @@ defmodule Polaroids.Gallery do
       last_modified: date,
       nickname: nickname,
       description: description,
-      venue: venue
+      venue: venue,
+      meta: meta
     }
   end
 
