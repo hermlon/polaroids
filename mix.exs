@@ -55,6 +55,7 @@ defmodule Polaroids.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:mail, "~> 0.3"},
       {:timex, "~> 3.7"},
+      {:ex_image_info, "~> 0.2.4"},
     ]
   end
 

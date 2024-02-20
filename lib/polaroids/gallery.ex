@@ -48,8 +48,9 @@ defmodule Polaroids.Gallery do
   end
 
   def create_image(key, file_binary, nickname, description, venue) do
+    {mimetype, _} = ExImageInfo.type(file_binary)
     %{headers: headers_list} = ExAws.S3.put_object("polaroids", key, file_binary,
-      content_type: "image/jpeg",
+      content_type: mimetype,
       content_disposition: "attachment",
       meta: [
         {:nickname, nickname},
