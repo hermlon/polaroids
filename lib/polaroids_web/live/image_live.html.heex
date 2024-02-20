@@ -19,9 +19,14 @@
           </div>
         </div>
       </div>
-      <button phx-click={JS.push("remove", value: %{id: @image.key})}>
+      <button phx-click={JS.push("share", value: %{id: @image.key})}>
+        Share
+      </button>
+      <button phx-hook="ImageShare" id="image_share_button" phx-click={JS.push("remove", value: %{id: @image.key})}>
         Delete
       </button>
     </div>
   </div>
 </div>
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+      <script>eruda.init();</script>

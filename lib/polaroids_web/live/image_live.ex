@@ -13,4 +13,9 @@ defmodule PolaroidsWeb.ImageLive do
     ExAws.S3.delete_object("polaroids", key) |> ExAws.request!
     {:noreply, push_navigate(socket, to: ~p"/g/#{Gallery.Image.gallery(key)}", replace: true)}
   end
+
+  def handle_event("share", %{"id" => key}, socket) do
+    {:noreply, push_event(socket, "share", %{image: Gallery.static_url(key)})}
+    #{:noreply, push_event(socket, "share", %{image: "/s3/#{key}"})}
+  end
 end

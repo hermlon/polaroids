@@ -17,6 +17,7 @@ defmodule PolaroidsWeb.Router do
   scope "/", PolaroidsWeb do
     pipe_through :api
     post "/g/:gallery", GalleryController, :create
+    get "/s3/:gallery/:image", S3Controller, :show
   end
 
   scope "/", PolaroidsWeb do
@@ -24,7 +25,7 @@ defmodule PolaroidsWeb.Router do
 
     live "/g/:gallery", GalleryLive
     live "/g/:gallery/:image", ImageLive
-    #get "/s3/:path", S3Controller, :show, log: false
+    #get "/s3/:path", S3Controller, :show
   end
 
   # Other scopes may use custom stacks.

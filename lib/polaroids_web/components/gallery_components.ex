@@ -13,8 +13,8 @@ defmodule PolaroidsWeb.GalleryComponents do
           src={Gallery.static_url(@image.key)}
         />
       </div>
-      <div :if={@info} class="flex flex-col justify-end pointer-events-none p-5 z-10 col-[1] row-[1] w-full">
-        <div class="flex flex-row hidden sm:flex justify-between">
+      <div :if={@info} class="flex flex-col hidden sm:flex justify-end pointer-events-none p-5 z-10 col-[1] row-[1] w-full">
+        <div class="flex flex-row justify-between">
           <div class="flex items-end">
             <%= @image.description %>
           </div>

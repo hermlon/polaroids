@@ -48,10 +48,13 @@ defmodule Polaroids.Gallery do
   end
 
   def create_image(key, file_binary, nickname, description, venue) do
-    %{headers: headers_list} = ExAws.S3.put_object("polaroids", key, file_binary, meta: [
-      {:nickname, nickname},
-      {:description, description},
-      {:venue, venue}] |> Enum.filter(&elem(&1, 1))
+    %{headers: headers_list} = ExAws.S3.put_object("polaroids", key, file_binary,
+      content_type: "image/jpeg",
+      meta: [
+        {:nickname, nickname},
+        {:description, description},
+        {:venue, venue}
+      ] |> Enum.filter(&elem(&1, 1))
     ) |> ExAws.request!
     %{"Date" => date_string} = Map.new(headers_list)
     date = Timex.parse!(date_string, "{RFC1123}")
