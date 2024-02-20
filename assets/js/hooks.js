@@ -34,7 +34,6 @@ Hooks.ImageShare = {
             try {
                 await navigator.share(share);
             } catch (error) {
-                alert("Your browser doesn't support webshare with files, try using Chrome")
                 console.error(error)
             }
         })
