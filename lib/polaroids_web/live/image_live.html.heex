@@ -1,6 +1,6 @@
 <div class="flex justify-center p-8">
   <div class="flex justify-center bg-neutral-800 p-8 rounded-lg">
-    <div class="flex flex-col max-w-md w-full space-y-2">
+    <div class="flex flex-col max-w-md w-full space-y-4">
       <PolaroidsWeb.GalleryComponents.image image={@image} />
       <div class="self-end text-xs opacity-50">
         <%= Timex.from_now(@image.last_modified) %>
@@ -19,14 +19,29 @@
           </div>
         </div>
       </div>
-      <button phx-click={JS.push("share", value: %{id: @image.key})}>
-        Share
-      </button>
-      <button phx-hook="ImageShare" id="image_share_button" phx-click={JS.push("remove", value: %{id: @image.key})}>
-        Delete
-      </button>
+      <div class="flex flex-row justify-between">
+        <a href={Gallery.static_url(@image.key)}>
+          <button
+            class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg border border-teal-500 hover:opacity-75 active:opacity-[0.85] flex items-center gap-3"
+            type="button">
+              <.icon name="hero-arrow-down-tray" /><div class="hidden md:flex">Save</div>
+          </button>
+        </a>
+        <button
+          class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg border border-teal-500 hover:opacity-75 active:opacity-[0.85] flex items-center gap-3"
+          type="button"
+          phx-hook="ImageShare" id="image_share_button" phx-click={JS.push("share", value: %{id: @image.key})}
+        >
+            <.icon name="hero-share" /><div class="hidden md:flex">Share</div>
+        </button>
+        <button
+          class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg border border-red-500 hover:opacity-75 active:opacity-[0.85] flex items-center gap-3"
+          type="button"
+          phx-click={JS.push("remove", value: %{id: @image.key})}
+        >
+            <.icon name="hero-trash" /><div class="hidden md:flex">Delete</div>
+        </button>
+      </div>
     </div>
   </div>
 </div>
-<script src="//cdn.jsdelivr.net/npm/eruda"></script>
-      <script>eruda.init();</script>

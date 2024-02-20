@@ -16,6 +16,5 @@ defmodule PolaroidsWeb.ImageLive do
 
   def handle_event("share", %{"id" => key}, socket) do
     {:noreply, push_event(socket, "share", %{image: Gallery.static_url(key)})}
-    #{:noreply, push_event(socket, "share", %{image: "/s3/#{key}"})}
   end
 end
