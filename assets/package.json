@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "animate-css-grid": "^1.5.1"
+  },
+  "devDependencies": {
+    "daisyui": "^4.7.2"
   }
 }

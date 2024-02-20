@@ -22,20 +22,20 @@
       <div class="flex flex-row justify-between">
         <a href={Gallery.static_url(@image.key)}>
           <button
-            class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg border border-teal-500 hover:opacity-75 active:opacity-[0.85] flex items-center gap-3"
+            class="btn btn-outline btn-primary"
             type="button">
               <.icon name="hero-arrow-down-tray" /><div class="hidden md:flex">Save</div>
           </button>
         </a>
         <button
-          class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg border border-teal-500 hover:opacity-75 active:opacity-[0.85] flex items-center gap-3"
+          class="btn btn-outline btn-primary"
           type="button"
           phx-hook="ImageShare" id="image_share_button" phx-click={JS.push("share", value: %{id: @image.key})}
         >
             <.icon name="hero-share" /><div class="hidden md:flex">Share</div>
         </button>
         <button
-          class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg border border-red-500 hover:opacity-75 active:opacity-[0.85] flex items-center gap-3"
+          class="btn btn-outline btn-error"
           type="button"
           phx-click={JS.push("remove", value: %{id: @image.key})}
         >
