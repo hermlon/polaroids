@@ -13,11 +13,17 @@ Hooks.ImageLoad = {
 }
 
 Hooks.ImageShare = {
-    mounted() {
+    checkShare() {
         const files = [ new File([""], "test.jpeg") ]
         if (!navigator.canShare({ files })) {
             this.el.disabled = true
         }
+    },
+    reconnected() {
+        this.checkShare()
+    },
+    mounted() {
+        this.checkShare()
 
         this.handleEvent("share", async ({ image }) => {
             const response = await fetch(image, { cache: "no-cache" })
