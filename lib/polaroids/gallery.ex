@@ -30,16 +30,19 @@ defmodule Polaroids.Gallery do
       key: key,
       last_modified: last_modified,
     } ->
-    %{headers: headers_list} = ExAws.S3.head_object(bucket(), key) |> ExAws.request!
+    Cachex.get!(:image_cache, key) ||
+    (%{headers: headers_list} = ExAws.S3.head_object(bucket(), key) |> ExAws.request!
     headers = Map.new(headers_list)
-    %Image{
+    image = %Image{
       key: key,
       last_modified: Timex.parse!(last_modified, "{ISO:Extended:Z}"),
       nickname: Map.get(headers, "x-amz-meta-nickname") |> RFC2047.parse_encoded_word,
       description: Map.get(headers, "x-amz-meta-description") |> RFC2047.parse_encoded_word,
       venue: Map.get(headers, "x-amz-meta-venue") |> RFC2047.parse_encoded_word,
       meta: Map.get(headers, "x-amz-meta-meta") |> RFC2047.parse_encoded_word,
-    } end)
+    }
+    Cachex.put!(:image_cache, key, image)
+    image) end)
   end
 
   def list_images(gallery, limit \\ nil) do
@@ -64,7 +67,7 @@ defmodule Polaroids.Gallery do
     ) |> ExAws.request!
     %{"Date" => date_string} = Map.new(headers_list)
     date = Timex.parse!(date_string, "{RFC1123}")
-    %Image{
+    image = %Image{
       key: key,
       last_modified: date,
       nickname: nickname,
@@ -72,9 +75,12 @@ defmodule Polaroids.Gallery do
       venue: venue,
       meta: meta
     }
+    Cachex.put!(:image_cache, key, image)
+    image
   end
 
   def delete_image(key) do
     ExAws.S3.delete_object(bucket(), key) |> ExAws.request!
+    Cachex.del!(:image_cache, key)
   end
 end

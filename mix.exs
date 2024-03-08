@@ -57,6 +57,7 @@ defmodule Polaroids.MixProject do
       {:timex, "~> 3.7"},
       {:ex_image_info, "~> 0.2.4"},
       {:cors_plug, "~> 3.0"},
+      {:cachex, "~> 3.6.0"},
     ]
   end
 

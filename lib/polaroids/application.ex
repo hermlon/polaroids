@@ -16,7 +16,8 @@ defmodule Polaroids.Application do
       # Start a worker by calling: Polaroids.Worker.start_link(arg)
       # {Polaroids.Worker, arg},
       # Start to serve requests, typically the last entry
-      PolaroidsWeb.Endpoint
+      PolaroidsWeb.Endpoint,
+      {Cachex, name: :image_cache}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
