@@ -19,6 +19,15 @@
           </div>
         </div>
       </div>
+      <div :if={@edit_url} class="flex">
+        <a class="grow" href={@edit_url} target="_blank">
+          <button
+            class="w-full btn btn-outline btn-secondary"
+            type="button">
+              <.icon name="hero-pencil-square" /><div class="hidden md:flex">Open in editor</div>
+          </button>
+        </a>
+      </div>
       <div class="flex flex-row justify-between">
         <a href={Gallery.static_url(@image.key)}>
           <button

@@ -30,7 +30,9 @@ s3_bucket = System.get_env("POLAROIDS_S3_BUCKET") ||
   environment variable POLAROIDS_S3_BUCKET is missing.
   """
 
-config :polaroids, s3_static_url: s3_static_url, s3_bucket: s3_bucket
+edit_url = System.get_env("POLAROIDS_EDIT_URL")
+
+config :polaroids, s3_static_url: s3_static_url, s3_bucket: s3_bucket, edit_url: edit_url
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.

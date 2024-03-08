@@ -4,7 +4,11 @@ defmodule PolaroidsWeb.ImageLive do
   use PolaroidsWeb, :live_view
 
   def mount(%{"gallery" => gallery, "image" => image}, _session, socket) do
-    socket = assign(socket, :image, Gallery.get_image!("#{gallery}/#{image}"))
+    gallery_image = Gallery.get_image!("#{gallery}/#{image}")
+    socket = assign(socket, :image, gallery_image)
+    edit_url = Application.fetch_env!(:polaroids, :edit_url)
+    socket = assign(socket, :edit_url, edit_url && (edit_url <> gallery_image.meta))
+
     {:ok, socket}
   end
 
