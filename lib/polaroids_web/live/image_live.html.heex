@@ -46,6 +46,7 @@
         <button
           class="btn btn-outline btn-error"
           type="button"
+          disabled={!@is_admin}
           phx-click={JS.push("remove", value: %{id: @image.key})}
         >
             <.icon name="hero-trash" /><div class="hidden md:flex">Delete</div>
