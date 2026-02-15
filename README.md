@@ -14,6 +14,7 @@ curl -F file=@img000017.jpg -F description="plushies" -F nickname=hermlon -F ven
 
 To start your Phoenix server:
 
+  * Run `npm install --prefix assets`
   * Run `mix setup` to install and setup dependencies
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
