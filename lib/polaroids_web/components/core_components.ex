@@ -17,7 +17,7 @@ defmodule PolaroidsWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import PolaroidsWeb.Gettext
+  use Gettext, backend: PolaroidsWeb.Gettext
 
   @doc """
   Renders a modal.
