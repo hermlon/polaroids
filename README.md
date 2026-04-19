@@ -1,3 +1,5 @@
+**This repository has been moved to Codeberg: https://codeberg.org/hermlon/polaroids**
+
 # Polaroids
 
 A live updating image gallery which can be posted to using HTTP POST requests and stores images in S3 compatible storage.
