@@ -7,7 +7,7 @@ defmodule PolaroidsWeb.GalleryLive do
   def mount(%{"gallery" => gallery}, _session, socket) do
     PubSub.subscribe(Polaroids.PubSub, "gallery")
     socket = assign(socket, :gallery, gallery)
-    socket = stream_configure(socket, :images, dom_id: &(&1.key))
+    socket = stream_configure(socket, :images, dom_id: & &1.key)
     socket = stream(socket, :images, Gallery.list_images(gallery))
     {:ok, socket}
   end

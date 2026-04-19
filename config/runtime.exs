@@ -20,19 +20,21 @@ if System.get_env("PHX_SERVER") do
   config :polaroids, PolaroidsWeb.Endpoint, server: true
 end
 
-s3_static_url = System.get_env("POLAROIDS_S3_STATIC_URL") ||
-  raise """
-  environment variable POLAROIDS_S3_STATIC_URL is missing.
-  """
+s3_static_url =
+  System.get_env("POLAROIDS_S3_STATIC_URL") ||
+    raise """
+    environment variable POLAROIDS_S3_STATIC_URL is missing.
+    """
 
-s3_bucket = System.get_env("POLAROIDS_S3_BUCKET") ||
-  raise """
-  environment variable POLAROIDS_S3_BUCKET is missing.
-  """
+s3_bucket =
+  System.get_env("POLAROIDS_S3_BUCKET") ||
+    raise """
+    environment variable POLAROIDS_S3_BUCKET is missing.
+    """
 
-edit_url = System.get_env("POLAROIDS_EDIT_URL")
+edit_url_map = System.get_env("POLAROIDS_EDIT_URL_MAP", "{}") |> Jason.decode!()
 
-config :polaroids, s3_static_url: s3_static_url, s3_bucket: s3_bucket, edit_url: edit_url
+config :polaroids, s3_static_url: s3_static_url, s3_bucket: s3_bucket, edit_url_map: edit_url_map
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
